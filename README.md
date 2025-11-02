@@ -29,13 +29,36 @@ Before deploying, replace `yourusername` with your actual GitHub username in the
 
 ### Step 3: Configure EmailJS
 
+**IMPORTANT: EmailJS credentials are now secured and NOT committed to git.**
+
+#### Local Development:
 1. Sign up at [EmailJS](https://www.emailjs.com/)
-2. Create a new email service
+2. Create a new email service (Gmail, Outlook, etc.)
 3. Create an email template
-4. Update `script.js` with your credentials:
-   - `EMAILJS_SERVICE_ID`
-   - `EMAILJS_TEMPLATE_ID`
-   - `EMAILJS_PUBLIC_KEY`
+4. Copy `config.example.js` to `config.js`:
+   ```bash
+   cp assets/js/config.example.js assets/js/config.js
+   ```
+5. Edit `assets/js/config.js` with your actual EmailJS credentials:
+   ```javascript
+   const CONFIG = {
+       EMAILJS_SERVICE_ID: 'service_abc123',     // Your service ID
+       EMAILJS_TEMPLATE_ID: 'template_xyz789',   // Your template ID
+       EMAILJS_PUBLIC_KEY: 'user_ABCdef123XYZ'   // Your public key
+   };
+   ```
+6. `assets/js/config.js` is gitignored and will NOT be committed
+
+#### GitHub Pages Deployment:
+For GitHub Pages, you have two options:
+
+**Option 1 (Quick)**: Update the default values in `assets/js/script.js` before deployment
+- Edit `assets/js/script.js` lines 18-22 with your actual credentials
+- Only do this right before deploying (don't commit sensitive values to public repos)
+
+**Option 2 (Recommended)**: Use GitHub Secrets and build process
+- Store credentials in GitHub repository secrets
+- Use GitHub Actions to inject them during build
 
 ### Step 4: Enable GitHub Pages
 
@@ -47,7 +70,7 @@ Before deploying, replace `yourusername` with your actual GitHub username in the
 
 ### Step 5: Optimize Images (Recommended)
 
-- Compress `Gym_Logo.jpg` using tools like [TinyPNG](https://tinypng.com/)
+- Compress `assets/images/logo.jpg` using tools like [TinyPNG](https://tinypng.com/)
 - Recommended size: under 200KB
 - Create a favicon.ico file (16x16 and 32x32 pixel versions)
 
@@ -62,25 +85,72 @@ Before deploying, replace `yourusername` with your actual GitHub username in the
 
 ```
 82gym/
-├── index.html          # Main HTML file
-├── styles.css          # Stylesheet
-├── script.js           # JavaScript (EmailJS integration)
-├── Gym_Logo.jpg        # Gym logo
-├── robots.txt          # Search engine crawler instructions
-├── sitemap.xml         # SEO sitemap
-├── .nojekyll          # GitHub Pages configuration
-└── README.md          # This file
+├── index.html            # Main HTML file
+├── robots.txt            # Search engine crawler instructions
+├── sitemap.xml           # SEO sitemap
+├── .nojekyll             # GitHub Pages configuration
+├── .gitignore            # Git ignore rules (protects sensitive files)
+├── .env.example          # Environment variables template
+├── README.md             # This file
+├── SECURITY.md           # Security documentation
+└── assets/
+    ├── css/
+    │   └── styles.css    # Main stylesheet
+    ├── js/
+    │   ├── script.js     # JavaScript (EmailJS integration, form validation)
+    │   ├── config.example.js  # EmailJS config template (copy to config.js)
+    │   └── config.js     # (gitignored) Your actual EmailJS credentials
+    ├── images/
+    │   └── logo.jpg      # Gym logo
+    └── fonts/            # Custom fonts (if needed)
 ```
 
-## Testing Checklist
+## Security Features
 
+✓ **EmailJS credentials protected** - Not committed to git (use config.js)
+✓ **Content Security Policy** - XSS protection
+✓ **Form validation** - Client-side input validation
+✓ **Subresource Integrity** - Verified CDN scripts
+✓ **Security headers** - X-Frame-Options, X-Content-Type-Options, Referrer-Policy
+
+## Pre-Deployment Checklist
+
+### Required Tasks (Must Complete):
+- [ ] **Replace placeholder URLs** (`yourusername` → your GitHub username)
+  - [ ] `index.html` lines 16, 19, 23, 26
+  - [ ] `robots.txt` line 5
+  - [ ] `sitemap.xml` all `<loc>` tags
+- [ ] **Configure EmailJS credentials** (see Step 3 above)
+- [ ] **Test contact form** works with your EmailJS account
+- [ ] **Verify all links** are correct and working
+
+### Recommended Tasks:
 - [ ] Test all navigation links
-- [ ] Test contact form with EmailJS
 - [ ] Verify responsive design on mobile devices
 - [ ] Check Google Maps functionality
 - [ ] Test all social media links
 - [ ] Verify logo displays correctly
-- [ ] Check SEO meta tags with tools like [SEO Checker](https://www.seobility.net/en/seocheck/)
+- [ ] Run security audit (browser DevTools)
+- [ ] Check SEO meta tags with [SEO Checker](https://www.seobility.net/en/seocheck/)
+- [ ] Test form validation (try invalid inputs)
+- [ ] Verify Content Security Policy doesn't block resources
+
+## Quick Start (Local Development)
+
+1. **Clone/download this repository**
+2. **Set up EmailJS** (optional for testing without email):
+   ```bash
+   cp assets/js/config.example.js assets/js/config.js
+   # Edit assets/js/config.js with your EmailJS credentials
+   ```
+3. **Open in browser**:
+   ```bash
+   # Simple: Just open index.html in your browser
+   # Or use a local server:
+   python -m http.server 8000
+   # Then visit: http://localhost:8000
+   ```
+4. **Test the site** - Check navigation, forms, and responsiveness
 
 ## Contact Information
 
