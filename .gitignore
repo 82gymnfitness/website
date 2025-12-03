@@ -25,6 +25,10 @@ build/
 *.sublime-project
 *.sublime-workspace
 
+# Claude Code and Task Engine
+.claude/
+.task-engine/
+
 # Testing
 coverage/
 .nyc_output/
